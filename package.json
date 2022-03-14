@@ -20,7 +20,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://olga07122007.github.io/mesto-react",
+  "homepage": "https://olga07122007.github.io/react-mesto-auth",
+	
   "eslintConfig": {
     "extends": [
       "react-app",
