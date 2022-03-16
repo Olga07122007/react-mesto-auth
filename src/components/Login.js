@@ -1,16 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import { useRouteMatch  } from 'react-router-dom';
-
-function Login({ getPath, handleLogin }) {
+function Login({ handleLogin }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	
-	
-	const { path} = useRouteMatch();
-	useEffect(() => {
-		getPath(path);	
-	}, [])
 	
 	//управляемые инпуты
 	function handleChangeEmail(e) {

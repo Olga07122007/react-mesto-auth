@@ -14,7 +14,7 @@ import Login from './Login';
 import InfoTooltip from './InfoTooltip';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
-import * as mestoAuth from './mestoAuth.js';
+import * as mestoAuth from '../utils/mestoAuth.js';
 import successIcon from '../images/popup/popup-success-icon.svg';
 import failIcon from '../images/popup/popup-fail-icon.svg';
 
@@ -42,8 +42,6 @@ function App() {
 	//данные для InfoTooltip
 	const [message, setMessage] = useState('');
 	const [url, setUrl] = useState('');
-	//путь роута
-	const [path, setPath] = useState('');
 	
 	//отображение начального профиля и загрузка элементов на страницу
 	useEffect(() => {
@@ -57,11 +55,6 @@ function App() {
 			});
 			checkToken();
 	}, []);
-	
-	//извлечение значения пути роута для шапки
-	function getPath(pathRout) {
-		setPath(pathRout);
-	}
 	
 	//функция открытия попапа редактирования профиля
 	function handleEditProfileClick() {
@@ -124,10 +117,8 @@ function App() {
 	//Удаление карточки
 	function handleCardDelete(card) {
     api.deleteCard(card._id)
-			.then((newCard) => {
-				setCards((state) => state.filter(function(item) {
-					return item._id!==card._id 
-				}));
+			.then(() => {
+				setCards((state) => state.filter((c) => c._id !== card._id));
 				closeAllPopups();
 			})
 		.catch(err => {
@@ -136,9 +127,9 @@ function App() {
 	}
 	
 	//Добавление карточки
-	function handleAddPlaceSubmit(titleinput, urlinput) {
+	function handleAddPlaceSubmit(titleInput, urlInput) {
 		setIsLoading(true);
-		api.addCard(titleinput, urlinput)
+		api.addCard(titleInput, urlInput)
 			.then((newCard) => {
 				setCards([newCard, ...cards]);
 			})
@@ -182,10 +173,6 @@ function App() {
 			closeAllPopups();
 		});
 	}
-	//вход, выход
-	function chengeLogStatus() {
-    setLoggedIn(!loggedIn);
-	}
 	
 	//регистрация
 	function handleRegister(password, email) {
@@ -199,15 +186,10 @@ function App() {
 				}
 			})
 			.catch((err) => {
-				if (err===400) {
-					console.log(`Ошибка: ${err}`);
-					setUrl(failIcon);
-					setMessage('Что-то пошло не так! Попробуйте еще раз.');
-					handleSuccessClick();
-				}
-				else {
-					console.log(`Ошибка: ${err}`);
-				}
+				console.log(`Ошибка: ${err}`);
+				setUrl(failIcon);
+				setMessage('Что-то пошло не так! Попробуйте еще раз.');
+				handleSuccessClick();
 			});
 	}
 	
@@ -217,30 +199,17 @@ function App() {
 			.then((res) => {
 				if(res.token) {
 					localStorage.setItem('token', res.token);
-					checkToken();
-					chengeLogStatus();
+					setLoggedIn(true);
+					setEmail(email);
 					history.push('/');
 				}
 			})
 			.catch((err) => {
-				if (err===400) {
-					console.log(`Ошибка: ${err}`);
-					setUrl(failIcon);
-					setMessage('Что-то пошло не так! Попробуйте еще раз.');
-					handleSuccessClick();
-					history.push('/sign-up');
-				}
-				else if (err===401) {
-					console.log(`Ошибка: ${err}`);
-					setUrl(failIcon);
-					setMessage('Что-то пошло не так! Попробуйте еще раз.');
-					handleSuccessClick();
-					history.push('/sign-up');
-				}
-				else {
-					console.log(`Ошибка: ${err}`);
-				}
-				
+				console.log(`Ошибка: ${err}`);
+				setUrl(failIcon);
+				setMessage('Что-то пошло не так! Попробуйте еще раз.');
+				handleSuccessClick();
+				history.push('/sign-in');
 			});
 	}
 	
@@ -248,37 +217,23 @@ function App() {
 	function checkToken() {
 		if (localStorage.getItem('token')) {
 			const jwt = localStorage.getItem('token');
-				if (jwt) {
-					mestoAuth.check(jwt)
-					.then((res) => {
-						setEmail(res.data.email);
-						setLoggedIn(true);
-						history.push('/');
-					})
-					.catch((err) => {
-						console.log(`Ошибка: ${err}`);
-					});
-			}
+			mestoAuth.check(jwt)
+				.then((res) => {
+					setEmail(res.data.email);
+					setLoggedIn(true);
+					history.push('/');
+				})
+				.catch((err) => {
+					console.log(`Ошибка: ${err}`);
+				});
 		}
 	}
 	
-	//клик по кнопке в шапке
-	function clickButtonHeader() {
-		if(loggedIn) {
-			localStorage.removeItem('token');
-			chengeLogStatus();
-			history.push('/sign-up');
-			setEmail('');
-		}
-		else {
-			switch(path) {
-				case('/sign-up'):
-					history.push('/sign-in');
-					break;
-				case('/sign-in'):
-					history.push('/sign-up');
-			}
-		}
+	//выход
+	function signOut() {
+		localStorage.removeItem('token');
+		setLoggedIn(false);
+		setEmail('');
 	}
 	
 	return (
@@ -286,9 +241,8 @@ function App() {
 			<CurrentUserContext.Provider value={currentUser}>
 				<Header 
 					loggedIn={loggedIn}
-					path={path}
 					email={email}
-					clickButtonHeader={clickButtonHeader}
+					signOut={signOut}
 				/>
 				
 				<main className="main">
@@ -308,20 +262,18 @@ function App() {
 					
 						<Route path="/sign-up">
 							<Register
-								getPath={getPath}
 								handleRegister={handleRegister}
 							/>
 						</Route>
 						
 						<Route path="/sign-in">
 							<Login
-								getPath={getPath}
 								handleLogin={handleLogin}
 							/>
 						</Route>
 						
 						<Route path="*">
-							<Redirect to="/sign-up" />
+							<Redirect to="/sign-in" />
 						</Route>
 					</Switch>
 				</main>
@@ -364,8 +316,7 @@ function App() {
 				<ImagePopup 
 					card={selectedCard}
 					onPopupClose={closeAllPopups}
-				>
-				</ImagePopup>
+				/>
 				
 				{/*попап удачной регистрации*/}
 				<InfoTooltip

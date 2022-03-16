@@ -33,15 +33,15 @@ function Card({ card, onCardClick, onCardLike, onConfirm }) {
 	
 	return(
 		<article className="element">
-			<img className="element__image" src={card.link} alt={card.name} onClick={handleCardClick}/>
+			<img className="element__image" src={card.link} alt={card.name} onClick={handleCardClick} />
 			<div className="element__title-container">
 				<h2 className="element__title">{card.name}</h2>
 				<div className="element__like-container">
-					<button type="button" className={cardLikeButtonClassName} onClick={handleLikeClick}></button>
+					<button type="button" className={cardLikeButtonClassName} onClick={handleLikeClick} />
 					<p className="element__counter">{card.likes.length}</p>
 				</div>
 			</div>
-			<button type="button" className={cardDeleteButtonClassName} onClick={handleConfirmClick}></button>
+			<button type="button" className={cardDeleteButtonClassName} onClick={handleConfirmClick} />
 		</article>
 	)
 }

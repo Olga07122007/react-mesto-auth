@@ -15,8 +15,7 @@ function ConfirmPopup({ isOpen, onPopupClose, card, onCardDelete }) {
 			isOpen={isOpen}
 			onPopupClose={onPopupClose}
 			onSubmit={handleSubmit}
-		>
-		</PopupWithForm>
+		/>
 	);
 }
 

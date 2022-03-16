@@ -1,14 +1,9 @@
-import { useState, useEffect } from 'react';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
-function Register({ getPath, handleRegister }) {
+function Register({ handleRegister }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	
-	const { path} = useRouteMatch();
-	useEffect(() => {
-		getPath(path);	
-	}, []);
 	
 	//управляемые инпуты
 	function handleChangeEmail(e) {

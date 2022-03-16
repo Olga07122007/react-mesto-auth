@@ -5,9 +5,9 @@ function PopupWithForm({ name, isOpen, title, children, buttonSave, onPopupClose
 					<h3 className="popup__title">{title}</h3>
 						<form name={`form${name}`} className="popup__input" noValidate onSubmit={onSubmit}>
 							{children}
-							<button type="submit" className="popup__save-btn" >{!isLoading ? buttonSave : 'Сохранение...'}</button>
+							<button type="submit" className="popup__save-btn">{!isLoading ? buttonSave : 'Сохранение...'}</button>
 						</form>
-						<button type="button" className="popup__close-icon" onClick={onPopupClose}></button>
+						<button type="button" className="popup__close-icon" onClick={onPopupClose} />
 				</div>
 			</div>
 	);
