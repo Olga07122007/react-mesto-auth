@@ -234,13 +234,13 @@ function App() {
 		localStorage.removeItem('token');
 		setLoggedIn(false);
 		setEmail('');
+		history.push('/sign-in');
 	}
 	
 	return (
 		<div className="page">
 			<CurrentUserContext.Provider value={currentUser}>
 				<Header 
-					loggedIn={loggedIn}
 					email={email}
 					signOut={signOut}
 				/>
