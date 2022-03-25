@@ -7,3 +7,10 @@
 	text-align: center;
 }
 
+@media screen and (max-width: 800px) {
+	.register__title {
+		font-size: 20px;
+		margin-bottom: 40px;
+	}
+}
+

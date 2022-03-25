@@ -9,3 +9,9 @@
 	border-radius: 0;
 	outline: none;
 }
+
+@media screen and (max-width: 800px) {
+	.header__link {
+		font-size: 14px;
+	}
+}

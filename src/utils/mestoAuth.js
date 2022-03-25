@@ -2,7 +2,7 @@ export const BASE_URL = 'https://auth.nomoreparties.co';
 
 export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {
-    method: 'POST',
+		method: 'POST',
     headers: {
       "Content-Type": "application/json"
     },
@@ -21,7 +21,7 @@ export const register = (password, email) => {
 
 export const login = (password, email) => {
   return fetch(`${BASE_URL}/signin`, {
-    method: 'POST',
+		method: 'POST',
     headers: {
       "Content-Type": "application/json"
     },

@@ -174,25 +174,6 @@ function App() {
 		});
 	}
 	
-	//регистрация
-	function handleRegister(password, email) {
-		mestoAuth.register(password, email)
-			.then((res) => {
-				if(res) {
-					setUrl(successIcon);
-					setMessage('Вы успешно зарегистрировались!');
-					handleSuccessClick();
-					history.push('/sign-in');
-				}
-			})
-			.catch((err) => {
-				console.log(`Ошибка: ${err}`);
-				setUrl(failIcon);
-				setMessage('Что-то пошло не так! Попробуйте еще раз.');
-				handleSuccessClick();
-			});
-	}
-	
 	//авторизация
 	function handleLogin(password, email) {
 		mestoAuth.login(password, email)
@@ -228,6 +209,29 @@ function App() {
 				});
 		}
 	}
+	
+	//регистрация
+	function handleRegister(password, email) {
+		mestoAuth.register(password, email)
+			.then((res) => {
+				if(res) {
+					setUrl(successIcon);
+					setMessage('Вы успешно зарегистрировались!');
+					handleSuccessClick();
+					history.push('/sign-in');
+				}
+			})	
+			.then(() => {
+				setTimeout(handleLogin, 300, password, email);
+			})
+			.catch((err) => {
+				console.log(`Ошибка: ${err}`);
+				setUrl(failIcon);
+				setMessage('Что-то пошло не так! Попробуйте еще раз.');
+				handleSuccessClick();
+			});
+	}
+	
 	
 	//выход
 	function signOut() {

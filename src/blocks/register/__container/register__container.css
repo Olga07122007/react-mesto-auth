@@ -7,3 +7,9 @@
 	justify-content: center;
 	position: relative;
 }
+
+@media screen and (max-width: 800px) {
+	.register__container {
+		min-width: 260px;
+	}
+}
