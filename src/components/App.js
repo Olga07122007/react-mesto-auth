@@ -42,6 +42,8 @@ function App() {
 	//данные для InfoTooltip
 	const [message, setMessage] = useState('');
 	const [url, setUrl] = useState('');
+	//меню мобильной версии
+	const [headerStatus, setHeaderStatus] = useState(false);
 	
 	//отображение начального профиля и загрузка элементов на страницу
 	useEffect(() => {
@@ -55,6 +57,11 @@ function App() {
 			});
 			checkToken();
 	}, []);
+	
+	//состояние для мобильной версии
+	function showHeaderMenu() {
+		setHeaderStatus(!headerStatus);
+	}
 	
 	//функция открытия попапа редактирования профиля
 	function handleEditProfileClick() {
@@ -247,6 +254,9 @@ function App() {
 				<Header 
 					email={email}
 					signOut={signOut}
+					loggedIn={loggedIn}
+					headerStatus={headerStatus}
+					showHeaderMenu={showHeaderMenu}
 				/>
 				
 				<main className="main">
@@ -262,6 +272,8 @@ function App() {
 							onCardClick={handleCardClick}
 							onCardLike={handleCardLike}
 							cards={cards}
+							headerStatus={headerStatus}
+							showHeaderMenu={showHeaderMenu}
 						/>
 					
 						<Route path="/sign-up">

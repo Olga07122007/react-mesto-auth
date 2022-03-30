@@ -1,12 +1,18 @@
 import { useContext } from 'react';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { useEffect } from 'react';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, cards, onConfirm }) {
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, cards, onConfirm, headerStatus, showHeaderMenu }) {
 	//подписка
 	const currentUser = useContext(CurrentUserContext);
 	//аватар
 	const imageStyle = { backgroundImage: `url(${currentUser.avatar})` };
+	
+	//при загрузке, меню скрыто
+	useEffect(() => {
+		headerStatus && showHeaderMenu();
+	}, []);
 	
 	return (
 		<>
